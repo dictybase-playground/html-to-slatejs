@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "convert": "html-to-slate c example.html output.js",
-    "compile": "babel ./ --out-dir lib --ignore node_modules"
+    "convert": "html-to-slate c example.html output.json",
+    "build": "babel ./ --out-dir lib --ignore node_modules"
   },
   "bin": {
-    "html-to-slate": "./index.js"
+    "html-to-slate": "./lib/index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,8 @@
     "babel-runtime": "^6.26.0",
     "commander": "^2.15.1",
     "immutable": "^3.8.2",
+    "jsdom": "^11.11.0",
+    "jsdom-global": "^3.0.2",
     "node-fetch": "^2.1.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
