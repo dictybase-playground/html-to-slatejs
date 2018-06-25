@@ -39,6 +39,36 @@ program
     })
   })
 
+program
+  .command("folder-convert <inputFolder> [outputFolder]")
+  .alias("f")
+  .description(
+    "Converts folder of HTML files to Slate.js content and saves to optional outputFolder or output",
+  )
+  .action((inputFolder, outputFolder) => {
+    fs.readdir(inputFolder, (err, files) => {
+      if (err) {
+        console.log(err)
+        process.exit(1) // stop the script
+      }
+
+      files.forEach(file => {
+        fs.readFile(file, "UTF-8", (err, content) => {
+          const fileContent = fs.readFileSync(inputFolder + "/" + file)
+          let convertedHtml = html.deserialize(fileContent)
+          const HtmlString = JSON.stringify(convertedHtml)
+
+          fs.writeFileSync(`${file + ".json"}`, HtmlString, err => {
+            if (err) {
+              console.log(err)
+            }
+          })
+        })
+        console.log("✅  Conversion complete!")
+      })
+    })
+  })
+
 program.parse(process.argv)
 
 if (!program.args.length) {
