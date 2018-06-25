@@ -1,14 +1,12 @@
 #! /usr/bin/env node
 "use strict"
 
-const fs = require("fs")
 const program = require("commander")
-const path = require("path")
-const html = require("./deserialize").html
 const { version } = require("../package.json")
 
-require("jsdom-global")()
-global.DOMParser = window.DOMParser
+// commands
+const convert = require("../commands/convert")
+const folderConvert = require("../commands/folder-convert")
 
 program.version(version).description("Convert HTML to Slate.js content")
 
@@ -18,28 +16,7 @@ program
   .description(
     "Converts HTML file to Slate.js content and saves to optional outputFile or output.json",
   )
-  .action((inputFile, outputFile) => {
-    fs.readFile(inputFile, "UTF-8", (err, content) => {
-      if (err) {
-        console.error(err)
-      }
-
-      let convertedHtml = html.deserialize(content)
-      const HtmlString = JSON.stringify(convertedHtml)
-
-      fs.writeFile(
-        `${outputFile ? outputFile : "output.json"}`,
-        HtmlString,
-        err => {
-          if (err) {
-            console.error(err)
-          }
-
-          console.log("Conversion complete!")
-        },
-      )
-    })
-  })
+  .action(convert)
 
 program
   .command("folder-convert <inputFolder> [outputFolder]")
@@ -47,48 +24,7 @@ program
   .description(
     "Converts folder of HTML files to Slate.js content and saves to optional outputFolder or output",
   )
-  .action((inputFolder, outputFolder) => {
-    fs.readdir(inputFolder, (err, files) => {
-      if (err) {
-        console.error(err)
-        process.exit(1) // stop the script
-      }
-
-      const checkDirectory = directory => {
-        try {
-          fs.statSync(directory)
-        } catch (e) {
-          fs.mkdirSync(directory)
-        }
-      }
-
-      files.forEach(file => {
-        fs.readFile(file, "UTF-8", (err, content) => {
-          const fileContent = fs.readFileSync(`${inputFolder}/${file}`)
-          const convertedHtml = html.deserialize(fileContent)
-          const HtmlString = JSON.stringify(convertedHtml)
-
-          const filenameWithoutExtension = path.basename(
-            file,
-            path.extname(file),
-          )
-
-          checkDirectory(outputFolder)
-
-          fs.writeFileSync(
-            `./${outputFolder}/${filenameWithoutExtension}.json`,
-            HtmlString,
-            err => {
-              if (err) {
-                console.error(err)
-              }
-            },
-          )
-        })
-        console.log("✅  Conversion complete!")
-      })
-    })
-  })
+  .action(folderConvert)
 
 program.parse(process.argv)
 
