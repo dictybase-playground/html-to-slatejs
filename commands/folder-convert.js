@@ -30,10 +30,16 @@ const folderConvert = (inputFolder, outputFolder) => {
 
         const filenameWithoutExtension = path.basename(file, path.extname(file))
 
-        checkDirectory(outputFolder)
+        if (outputFolder) {
+          checkDirectory(outputFolder)
+        } else {
+          checkDirectory("output")
+        }
 
         fs.writeFileSync(
-          `./${outputFolder}/${filenameWithoutExtension}.json`,
+          outputFolder
+            ? `./${outputFolder}/${filenameWithoutExtension}.json`
+            : `./output/${filenameWithoutExtension}.json`,
           HtmlString,
           err => {
             if (err) {
