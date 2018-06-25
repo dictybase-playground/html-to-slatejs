@@ -27,3 +27,7 @@ For help type:
 ```
 html-to-slate -h
 ```
+
+### Development
+
+Make changes on a separate branch, run `npm run build` then merge to `develop`.
