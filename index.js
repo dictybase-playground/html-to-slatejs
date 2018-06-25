@@ -3,7 +3,7 @@
 
 const fs = require("fs")
 const program = require("commander")
-var path = require("path")
+const path = require("path")
 const html = require("./deserialize").html
 const { version } = require("../package.json")
 
@@ -21,7 +21,7 @@ program
   .action((inputFile, outputFile) => {
     fs.readFile(inputFile, "UTF-8", (err, content) => {
       if (err) {
-        console.log(err)
+        console.error(err)
       }
 
       let convertedHtml = html.deserialize(content)
@@ -32,7 +32,7 @@ program
         HtmlString,
         err => {
           if (err) {
-            console.log(err)
+            console.error(err)
           }
 
           console.log("Conversion complete!")
@@ -50,14 +50,22 @@ program
   .action((inputFolder, outputFolder) => {
     fs.readdir(inputFolder, (err, files) => {
       if (err) {
-        console.log(err)
+        console.error(err)
         process.exit(1) // stop the script
+      }
+
+      const checkDirectory = directory => {
+        try {
+          fs.statSync(directory)
+        } catch (e) {
+          fs.mkdirSync(directory)
+        }
       }
 
       files.forEach(file => {
         fs.readFile(file, "UTF-8", (err, content) => {
-          const fileContent = fs.readFileSync(inputFolder + "/" + file)
-          let convertedHtml = html.deserialize(fileContent)
+          const fileContent = fs.readFileSync(`${inputFolder}/${file}`)
+          const convertedHtml = html.deserialize(fileContent)
           const HtmlString = JSON.stringify(convertedHtml)
 
           const filenameWithoutExtension = path.basename(
@@ -65,12 +73,14 @@ program
             path.extname(file),
           )
 
+          checkDirectory(outputFolder)
+
           fs.writeFileSync(
-            `${filenameWithoutExtension + ".json"}`,
+            `./${outputFolder}/${filenameWithoutExtension}.json`,
             HtmlString,
             err => {
               if (err) {
-                console.log(err)
+                console.error(err)
               }
             },
           )
