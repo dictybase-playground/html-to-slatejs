@@ -3,11 +3,12 @@
 const fs = require("fs")
 const program = require("commander")
 const html = require("./serialize").html
+const { version } = require("../package.json")
 
 require("jsdom-global")()
 global.DOMParser = window.DOMParser
 
-program.version("1.0.0").description("Convert HTML to Slate.js content")
+program.version(version).description("Convert HTML to Slate.js content")
 
 program
   .command("convert <inputFile> [outputFile]")
@@ -21,12 +22,12 @@ program
         console.log(err)
       }
 
-      let contentState = html.deserialize(content)
-      const contentStateString = JSON.stringify(contentState)
+      let convertedHtml = html.deserialize(content)
+      const HtmlString = JSON.stringify(convertedHtml)
 
       fs.writeFile(
         `${outputFile ? outputFile : "output.json"}`,
-        contentStateString,
+        HtmlString,
         err => {
           if (err) {
             console.log(err)
@@ -39,3 +40,7 @@ program
   })
 
 program.parse(process.argv)
+
+if (!program.args.length) {
+  program.help()
+}

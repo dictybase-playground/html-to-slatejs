@@ -75,4 +75,6 @@ const rules = [
 // Create a new serializer instance with our `rules` from above.
 const html = new Html({ rules: rules })
 
-module.exports.html = html
+module.exports = {
+  html: html,
+}
