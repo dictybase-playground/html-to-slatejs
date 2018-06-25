@@ -1,16 +1,26 @@
 const Html = require("slate-html-serializer").default
 
 const BLOCK_TAGS = {
-  blockquote: "quote",
   p: "paragraph",
+  li: "list-item",
+  ul: "bulleted-list",
+  ol: "numbered-list",
+  blockquote: "quote",
   pre: "code",
+  h1: "heading-one",
+  h2: "heading-two",
+  h3: "heading-three",
+  h4: "heading-four",
+  h5: "heading-five",
+  h6: "heading-six",
 }
 
 const MARK_TAGS = {
-  em: "italic",
   strong: "bold",
+  em: "italic",
   u: "underline",
-  del: "strikethrough",
+  s: "strikethrough",
+  code: "code",
 }
 
 const rules = [
