@@ -2,7 +2,7 @@
 
 const fs = require("fs")
 const program = require("commander")
-const html = require("./serialize").html
+const html = require("./deserialize").html
 const { version } = require("../package.json")
 
 require("jsdom-global")()
