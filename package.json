@@ -5,11 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "convert": "html-to-slate c example.html output.json",
-    "build": "babel ./ --out-dir lib --ignore node_modules"
+    "build": "babel ./ --out-dir lib --ignore node_modules",
+    "precommit": "lint-staged"
   },
   "bin": {
     "html-to-slate": "./lib/index.js"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier --no-semi --trailing-comma all --jsx-bracket-same-line true --write",
+      "git add"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -31,5 +37,10 @@
     "react-dom": "^16.4.1",
     "slate": "^0.34.2",
     "slate-html-serializer": "^0.6.8"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.6"
   }
 }
