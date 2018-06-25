@@ -12,9 +12,12 @@ const convert = (inputFile, outputFile) => {
       console.error(err)
     }
 
+    // convert this HTML to deserialized form
     let convertedHtml = html.deserialize(content)
+    // stringify the converted HTML
     const HtmlString = JSON.stringify(convertedHtml)
 
+    // write the new file
     fs.writeFile(
       `${outputFile ? outputFile : "output.json"}`,
       HtmlString,
