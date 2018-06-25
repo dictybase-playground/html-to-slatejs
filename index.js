@@ -1,7 +1,9 @@
 #! /usr/bin/env node
+"use strict"
 
 const fs = require("fs")
 const program = require("commander")
+var path = require("path")
 const html = require("./deserialize").html
 const { version } = require("../package.json")
 
@@ -58,11 +60,20 @@ program
           let convertedHtml = html.deserialize(fileContent)
           const HtmlString = JSON.stringify(convertedHtml)
 
-          fs.writeFileSync(`${file + ".json"}`, HtmlString, err => {
-            if (err) {
-              console.log(err)
-            }
-          })
+          const filenameWithoutExtension = path.basename(
+            file,
+            path.extname(file),
+          )
+
+          fs.writeFileSync(
+            `${filenameWithoutExtension + ".json"}`,
+            HtmlString,
+            err => {
+              if (err) {
+                console.log(err)
+              }
+            },
+          )
         })
         console.log("✅  Conversion complete!")
       })
